@@ -1,17 +1,32 @@
-const phone = document.getElementById('phone');
+const phoneInput = document.getElementById('phone');
 const countryCodeSelector = document.getElementById('country_code');
-const btn = document.querySelector('button');
+const form = document.querySelector('form');
 
-for (const country of countryPhoneCode){
-    let option = document.createElement('option')
-    option.text = country.code + ', ' + country.country
-    option.value = country.code
-    if(country.code === '972'){
-        option.selected = 'selected'
-    }
-    countryCodeSelector.appendChild(option)
+for (const country of countryPhoneCode) {
+  const option = document.createElement('option');
+  option.text = `${country.code}, ${country.country}`;
+  option.value = country.code;
+  if (country.code === '972') {
+    option.selected = true;
+  }
+  countryCodeSelector.appendChild(option);
 }
-btn.addEventListener('click', (event)=>{
-    event.preventDefault();
-    window.location.replace(`https://wa.me/${countryCodeSelector.value + phone.value}`)
-})
+
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  let phoneNumber = phoneInput.value.trim();
+
+  if (!phoneNumber) {
+    alert('Please enter a phone number!');
+    return;
+  }
+
+  // Optional: trim leading zero if present
+  if (phoneNumber.startsWith('0')) {
+    phoneNumber = phoneNumber.slice(1);
+  }
+
+  const countryCode = countryCodeSelector.value;
+  const waLink = `https://wa.me/${countryCode}${phoneNumber}`;
+  window.location.replace(waLink);
+});
